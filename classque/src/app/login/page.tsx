@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 const LoginPage = () => {
   return (
-    <div className="flex flex-col justify-center items-center">
+    <div className="bg-[#D0A691] flex flex-col justify-center items-center p-10">
        <LoginForm /> 
       
     </div>

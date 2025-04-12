@@ -46,8 +46,8 @@ const SignupForm = () => {
   return (
     <>
         <div className="grid mt-8 justify-items-center"> 
-            <div className="shadow-lg p-5 rounded-lg border-t-4 bg-white border-red-700">
-                <h1 className="text-xl text-slate-600 font-bold my-4">Signup</h1>
+            <div className="shadow-lg p-5 rounded-lg border-t-4 bg-white border-[#6A3636]">
+                <h1 className="text-xl text-slate-600 font-bold my-4">You're new, welcome!</h1>
       <form
   onSubmit={handleSubmit}
   className="my-8 max-w-md mx-auto flex flex-col gap-4 border p-6 border-gray-300 rounded-md shadow-sm bg-white"
@@ -57,10 +57,11 @@ const SignupForm = () => {
       Username
     </label>
     <input
-      className="border border-gray-400 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
+      className="border border-gray-400 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black-500"
       type="text"
       name="username"
       id="username"
+      placeholder="Username"
       required
     />
   </div>
@@ -70,10 +71,11 @@ const SignupForm = () => {
       Email Address
     </label>
     <input
-      className="border border-gray-400 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
+      className="border border-gray-400 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black-500"
       type="email"
       name="email"
       id="email"
+      placeholder="Email"
       required
     />
   </div>
@@ -83,17 +85,18 @@ const SignupForm = () => {
       Password
     </label>
     <input
-      className="border border-gray-400 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
+      className="border border-gray-400 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black-500"
       type="password"
       name="password"
       id="password"
+      placeholder="Password"
       required
     />
   </div>
 
   <button
     type="submit"
-    className="bg-red-700 text-white rounded px-4 py-2 mt-2 hover:bg-red-800 transition"
+    className="bg-[#6A3636] text-white rounded px-4 py-2 mt-2 hover:bg-[#5A3636] transition"
   >
     Signup
   </button>
