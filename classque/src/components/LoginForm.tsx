@@ -20,7 +20,7 @@ const LoginForm = () => {
         console.error(response.error);
         setError(response.error.message || "An error occurred");
       } else {
-        router.push("/");
+        router.push("/show-items");
       }
     } catch (e: any) {
       console.error(e);
@@ -31,8 +31,8 @@ const LoginForm = () => {
   return (
     <div className='ShowItemList'>
     <div className="grid mt-8 justify-items-center"> 
-      <div className="shadow-lg p-5 rounded-lg border-t-4 bg-white border-red-700">
-       <h1 className="text-xl text-slate-600 font-bold my-4">Login</h1>
+      <div className="shadow-lg border-[#6A3636] p-5 rounded-lg border-t-4 bg-white">
+       <h1 className="text-xl text-slate-600 font-bold my-4">Good to see you again!</h1>
       {error && <div className="text-lg text-red-500">{error}</div>}
       <form
   onSubmit={onSubmit}
@@ -43,7 +43,7 @@ const LoginForm = () => {
       Email Address
     </label>
     <input
-      className="border border-gray-400 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
+      className="border border-gray-400 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black-500"
       type="email"
       name="email"
       id="email"
@@ -57,7 +57,7 @@ const LoginForm = () => {
       Password
     </label>
     <input
-      className="border border-gray-400 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
+      className="border border-gray-400 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black-500"
       type="password"
       name="password"
       id="password"
@@ -68,14 +68,14 @@ const LoginForm = () => {
 
   <button
     type="submit"
-    className="bg-red-700 text-white rounded px-4 py-2 mt-2 hover:bg-red-800 transition"
+    className="bg-[#6A3636] text-white rounded px-4 py-2 mt-2 hover:bg-[#5A3636] transition"
   >
     Login
   </button>
 </form>
 
       <p className="my-3 text-center">
-        Don't you have an account?
+        Don't have an account?
         <Link href="signup" className="mx-2 underline">Signup</Link>
       </p>
     </div>
