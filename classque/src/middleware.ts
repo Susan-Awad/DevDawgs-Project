@@ -22,7 +22,7 @@ const middleware = async (request: NextRequest) => {
 
 export const config = {
   matcher: [
-    "/create-item/:path*",
+    "/create-item/:path", // path not being restricted
     "/update-item/:path*",
     "/delete-item/:path*",
   ],
