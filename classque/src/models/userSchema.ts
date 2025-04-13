@@ -1,32 +1,5 @@
 import mongoose, { Document, Schema, Model } from "mongoose";
-
-// Define the Task interface
-interface ITask {
-  name: string;
-  dueDate: Date;
-  points: number; // For priority
-}
-
-// Define the Task schema
-const taskSchema = new Schema<ITask>({
-  name: { type: String, required: true },
-  dueDate: { type: Date, required: true },
-  points: { type: Number, required: true, default: 0 }
-});
-
-// Define the Schedule interface
-interface ISchedule {
-  title: string;
-  duration: 1 | 2; // 1 or 2 weeks
-  tasks: ITask[];
-}
-
-// Define the Schedule schema
-const scheduleSchema = new Schema<ISchedule>({
-  title: { type: String, required: true },
-  duration: { type: Number, required: true, enum: [1, 2] },
-  tasks: [taskSchema]
-});
+import { ISchedule, scheduleSchema } from "./scheduleSchema";
 
 // Define the User interface
 export interface IUser extends Document {

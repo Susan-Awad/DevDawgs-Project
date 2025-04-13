@@ -5,25 +5,25 @@ import {useState, useEffect} from 'react';
 
    export default function Items() {
 
-    const [UGAitems, setItems] = useState([]);
+    const [schedules, setSchedules] = useState([]);
   
    useEffect(() => {
-      const fetchItems = async () => {
+      const fetchSchedules = async () => {
         try {
-          const response = await fetch('/api/items');
+          const response = await fetch('/api/schedules');
           if (!response.ok) {
             throw new Error('Network response was not ok');
           }
           const data = await response.json();
-           setItems(data.items);
+           setSchedules(data.items);
         
-           console.log(UGAitems);
+           console.log(schedules);
         } catch (error) {
               console.log('Error from ShowItemList:', error);
         }
       };
   
-      fetchItems();
+      fetchSchedules();
     }, []);
 
     return (
@@ -32,11 +32,11 @@ import {useState, useEffect} from 'react';
             <div className='container-xl lg:container m-auto px-4 py-6'>
 
  
-                {UGAitems.length === 0 ? (
+                {schedules.length === 0 ? (
                     <p>No schedules created yet. Let's get to work!</p>
                 ) : (
                     <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
-                        {UGAitems.map((item, k) => (  
+                        {schedules.map((item, k) => (  
                         <Item item={item} key={k}  />
                     ))}
                         

@@ -3,25 +3,26 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Card from '../../components/Card';
-import Task from '../../models/userSchema';
+import { ITask } from '../../models/taskSchema';
 import axios from 'axios';
 
-interface Task {
-  id: number;
-  name: string;
-  dueDate: string;
-  points: string;
+// Extended task interface with id
+interface ITaskWithId extends ITask {
+  id: string;
 }
 
 const API_URL = 'https://api.unsplash.com/photos/random';
 const apiKey = process.env.REACT_APP_API_KEY;
+// Function to generate a unique ID
+const generateId = () => Math.random().toString(36).substring(2, 9);
 
 export default function ScheduleAddForm() {
   const [scheduleName, setScheduleName] = useState('');
+  const [start, setStart] = useState();
   const [duration, setDuration] = useState('1 Week');
   const [image, setImage] = useState('wallpaper');
-  const [tasks, setTasks] = useState<Task[]>([
-    { id: 1, name: '', dueDate: '', points: '' },
+  const [tasks, setTasks] = useState<ITaskWithId[]>([
+    { id: generateId(), name: '', dueDate: new Date('2025-01-01T00:00:00'), points: undefined },
   ]);
 
   const router = useRouter();
@@ -34,7 +35,7 @@ export default function ScheduleAddForm() {
     setDuration(e.target.value);
   };
 
-  const handleTaskChange = (id: number, field: keyof Task, value: string) => {
+  const handleTaskChange = (id: string, field: keyof ITask, value: any) => {
     setTasks(prevTasks => 
       prevTasks.map(task => 
         task.id === id ? { ...task, [field]: value } : task
@@ -60,21 +61,44 @@ export default function ScheduleAddForm() {
   };
 
   const addNewTask = () => {
-    const newId = Math.max(0, ...tasks.map(task => task.id)) + 1;
-    setTasks([...tasks, { id: newId, name: '', dueDate: '', points: '' }]);
+    setTasks([...tasks, { 
+      id: generateId(), 
+      name: '', 
+      dueDate: new Date('2025-01-01T00:00:00'), 
+      points: 0
+    }]);
   };
 
-  const removeTask = (id: number) => {
-    setTasks(tasks.filter(task => task.id !== id));
+  const removeTask = (id: string) => {
+    // Only remove the task if there's more than one or if we're not removing the last empty task
+    if (tasks.length > 1) {
+      setTasks(tasks.filter(task => task.id !== id));
+    } else {
+      // If it's the last task, just clear its values instead of removing it
+      setTasks([{ id: generateId(), name: '', dueDate: new Date(""), points: undefined }]);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Filter out any tasks with empty names before submitting
+    const validTasks = tasks.filter(task => task.name.trim() !== '');
+    
+    // Only proceed if there's at least one valid task
+    if (validTasks.length === 0) {
+      alert('Please add at least one task with a name');
+      return;
+    }
+
+    // Transform tasks to match ITask interface (remove the id field)
+    const tasksToSubmit = validTasks.map(({ id, ...rest }) => rest);
+
     const formData = {
       scheduleName,
+      start,
       duration,
-      tasks,
+      tasks: tasksToSubmit,
     };
 
     try {
@@ -94,19 +118,20 @@ export default function ScheduleAddForm() {
       setScheduleName('');
       setDuration('1 Week');
       setTasks([
-        { id: 1, name: '', dueDate: '', points: '' },
+        { id: generateId(), name: '', dueDate: new Date(''), points: 0 },
       ]);
       
-      router.push('/schedules');
+      router.push('/show-items');
     } catch (error) {
       console.error('Error in CreateSchedule!', error);
     }
   };
 
   return (
+    <div className='bg-[#F7D0BC]'>
     <div className="max-w-lg mx-auto mt-10 px-4">
       <Card>
-        <div className="text-2xl font-bold mb-4">ClassCue</div>
+        <div className="text-2xl font-bold mb-4 text-center">ClassCue</div>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="text-center mb-4">
             <input
@@ -121,7 +146,7 @@ export default function ScheduleAddForm() {
           </div>
           
           <div className="mb-4">
-            <p className="text-center mb-2">INSTRUCTIONS: assign priority in ascending order.</p>
+            <p className="text-center mb-2">INSTRUCTIONS: please give each of your tasks a priority score of 1-100 (1 is lowest 100 is highest)</p>
             
             <div className="mb-4">
               <p className="mb-2">Duration:</p>
@@ -171,6 +196,7 @@ export default function ScheduleAddForm() {
                 onClick={() => removeTask(task.id)}
                 className="absolute right-2 top-2 text-gray-500 hover:text-red-500"
               >
+                {/* Code for the trash can logo*/}
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M3 6h18"></path>
                   <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"></path>
@@ -178,7 +204,7 @@ export default function ScheduleAddForm() {
               </button>
               
               <div className="mb-2">
-                <p className="font-semibold">Task {task.id}</p>
+                <p className="font-semibold">Task</p>
               </div>
               
               <div className="mb-2">
@@ -196,8 +222,9 @@ export default function ScheduleAddForm() {
                 <label className="block text-sm font-medium mb-1">Due Date:</label>
                 <input
                   type="date"
-                  value={task.dueDate}
-                  onChange={(e) => handleTaskChange(task.id, 'dueDate', e.target.value)}
+                  value={task.dueDate instanceof Date ? task.dueDate.toISOString().split('T')[0] : task.dueDate}
+                  placeholder=''
+                  onChange={(e) => handleTaskChange(task.id, 'dueDate', new Date(e.target.value))}
                   className="w-full p-2 border border-gray-300 rounded"
                 />
               </div>
@@ -207,9 +234,11 @@ export default function ScheduleAddForm() {
                 <input
                   type="number"
                   value={task.points}
-                  onChange={(e) => handleTaskChange(task.id, 'points', e.target.value)}
+                  onChange={(e) => handleTaskChange(task.id, 'points', parseInt(e.target.value) || 0)}
                   className="w-full p-2 border border-gray-300 rounded"
                   placeholder="Priority"
+                  min="1"
+                  max="100"
                 />
               </div>
             </div>
@@ -220,7 +249,7 @@ export default function ScheduleAddForm() {
               type="button"
               onClick={addNewTask}
               className="flex items-center justify-center w-full py-2 border border-gray-300 rounded hover:bg-gray-100"
-            >
+            > {/* Code for the plus sign*/}
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
                 <line x1="12" y1="5" x2="12" y2="19"></line>
                 <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -239,6 +268,7 @@ export default function ScheduleAddForm() {
           </div>
         </form>
       </Card>
+    </div>
     </div>
   );
 }
