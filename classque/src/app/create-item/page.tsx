@@ -18,7 +18,7 @@ export default function ScheduleAddForm() {
   const [start, setStart] = useState();
   const [duration, setDuration] = useState('1 Week');
   const [tasks, setTasks] = useState<ITaskWithId[]>([
-    { id: generateId(), name: '', dueDate: new Date('1999-01-01T00:00:00'), points: 0 },
+    { id: generateId(), name: '', dueDate: new Date('2025-01-01T00:00:00'), points: undefined },
   ]);
 
   const router = useRouter();
@@ -43,8 +43,8 @@ export default function ScheduleAddForm() {
     setTasks([...tasks, { 
       id: generateId(), 
       name: '', 
-      dueDate: new Date('1999-01-01T00:00:00'), 
-      points: 0 
+      dueDate: new Date('2025-01-01T00:00:00'), 
+      points: 0
     }]);
   };
 
@@ -54,7 +54,7 @@ export default function ScheduleAddForm() {
       setTasks(tasks.filter(task => task.id !== id));
     } else {
       // If it's the last task, just clear its values instead of removing it
-      setTasks([{ id: generateId(), name: '', dueDate: new Date('1999-01-01T00:00:00'), points: 0 }]);
+      setTasks([{ id: generateId(), name: '', dueDate: new Date(""), points: undefined }]);
     }
   };
 
@@ -163,6 +163,7 @@ export default function ScheduleAddForm() {
                 onClick={() => removeTask(task.id)}
                 className="absolute right-2 top-2 text-gray-500 hover:text-red-500"
               >
+                {/* Code for the trash can logo*/}
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M3 6h18"></path>
                   <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"></path>
@@ -189,6 +190,7 @@ export default function ScheduleAddForm() {
                 <input
                   type="date"
                   value={task.dueDate instanceof Date ? task.dueDate.toISOString().split('T')[0] : task.dueDate}
+                  placeholder=''
                   onChange={(e) => handleTaskChange(task.id, 'dueDate', new Date(e.target.value))}
                   className="w-full p-2 border border-gray-300 rounded"
                 />
@@ -214,7 +216,7 @@ export default function ScheduleAddForm() {
               type="button"
               onClick={addNewTask}
               className="flex items-center justify-center w-full py-2 border border-gray-300 rounded hover:bg-gray-100"
-            >
+            > {/* Code for the plus sign*/}
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
                 <line x1="12" y1="5" x2="12" y2="19"></line>
                 <line x1="5" y1="12" x2="19" y2="12"></line>
