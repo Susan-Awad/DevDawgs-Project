@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Card from '../../components/Card';
 import Task from '../../models/userSchema';
+import axios from 'axios';
 
 interface Task {
   id: number;
@@ -12,9 +13,13 @@ interface Task {
   points: string;
 }
 
+const API_URL = 'https://api.unsplash.com/photos/random';
+const apiKey = process.env.REACT_APP_API_KEY;
+
 export default function ScheduleAddForm() {
   const [scheduleName, setScheduleName] = useState('');
   const [duration, setDuration] = useState('1 Week');
+  const [image, setImage] = useState('wallpaper');
   const [tasks, setTasks] = useState<Task[]>([
     { id: 1, name: '', dueDate: '', points: '' },
   ]);
@@ -35,6 +40,23 @@ export default function ScheduleAddForm() {
         task.id === id ? { ...task, [field]: value } : task
       )
     );
+  };
+
+  const fetchImages = async () => {
+    try {
+      const result = await axios.get(
+        `${API_URL}?query=${image}
+        $count=1$client_id=${apiKey}`
+      );
+      setImage(result.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setImage(e.target.value);
+    fetchImages();
   };
 
   const addNewTask = () => {
@@ -130,6 +152,18 @@ export default function ScheduleAddForm() {
             </div>
           </div>
           
+          <div className="text-center mb-4">
+            <input 
+              name="image"
+              type="text"
+              value={image}
+              onChange={handleImageChange}
+              placeholder="image"
+              required
+              className="w-full p-2 border border-gray-300 rounded text-center text-lg font-medium"
+            />
+          </div>
+
           {tasks.map((task) => (
             <div key={task.id} className="border border-gray-200 p-4 rounded-md relative mb-4">
               <button 
