@@ -33,7 +33,7 @@ import {useState, useEffect} from 'react';
 
  
                 {UGAitems.length === 0 ? (
-                    <p>No UGA items available</p>
+                    <p>No schedules created yet. Let's get to work!</p>
                 ) : (
                     <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
                         {UGAitems.map((item, k) => (  
@@ -44,9 +44,9 @@ import {useState, useEffect} from 'react';
                 )}
             
             <Link href={`/create-item`}
-                   className="bg-red-700 text-white px-4 py-2 rounded hover:bg-red-800 mt-4 inline-block"
+                   className="bg-[#6A3636] text-white px-4 py-2 rounded hover:bg-[#5A3636] mt-4 inline-block"
                    
-                > Create New Item
+                > Create New Schedule
                 </Link>
             </div>
         </section>
