@@ -1,5 +1,5 @@
 import Navbar from "../components/Navbar";
-import {auth} from "../auth"
+import { auth } from "../auth";
 import "./globals.css";
 
 
@@ -7,7 +7,8 @@ export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
+}>)
+{
   const session = await auth();
 
   return (

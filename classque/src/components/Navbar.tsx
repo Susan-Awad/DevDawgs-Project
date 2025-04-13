@@ -41,6 +41,13 @@ const Navbar = ({ session }: NavbarProps) => {
               <Image className='h-10 w-auto' src={logo} alt='ClassCue logo' />
               <span className='md:block text-white text-2xl font-bold ml-2'>ClassCue</span>
             </Link>
+            {isLoggedIn && session?.user ? (
+              <>
+                <Link className='flex flex-shrink-0 items-center' href='/show-items' >
+                  <span className='md:block text-white text-2l font-bold ml-2'>| Schedules</span>
+                </Link>
+              </>
+            ) : (<></>)}
           </div>
 
           {/* Right side - Auth status */}

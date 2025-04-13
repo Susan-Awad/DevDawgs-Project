@@ -76,7 +76,7 @@ const LoginForm = () => {
 
       <p className="my-3 text-center">
         Don't have an account?
-        <Link href="signup" className="mx-2 underline">Signup</Link>
+        <Link href="signup" className="mx-2 underline">Register</Link>
       </p>
     </div>
     </div>

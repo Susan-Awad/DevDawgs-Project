@@ -3,7 +3,10 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import User from "./models/userSchema";
+import connectMongoDB from "../config/mongodb";
 
+
+// used for comparing the credentials of the user trying to login and the database.
 export const {
     handlers: { GET, POST },
     auth,
@@ -21,6 +24,8 @@ export const {
         if (!credentials) return null;
 
         try {
+
+          await connectMongoDB();
           const user = await User.findOne({ email: credentials.email }).lean();
 
           if (user) {
