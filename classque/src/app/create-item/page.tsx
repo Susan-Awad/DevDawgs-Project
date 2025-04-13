@@ -3,20 +3,22 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Card from '../../components/Card';
-import Task from '../../models/userSchema';
+import { ITask } from '../../models/taskSchema';
 
-interface Task {
-  id: number;
-  name: string;
-  dueDate: string;
-  points: string;
+// Extended task interface with id
+interface ITaskWithId extends ITask {
+  id: string;
 }
+
+// Function to generate a unique ID
+const generateId = () => Math.random().toString(36).substring(2, 9);
 
 export default function ScheduleAddForm() {
   const [scheduleName, setScheduleName] = useState('');
+  const [start, setStart] = useState();
   const [duration, setDuration] = useState('1 Week');
-  const [tasks, setTasks] = useState<Task[]>([
-    { id: 1, name: '', dueDate: '', points: '' },
+  const [tasks, setTasks] = useState<ITaskWithId[]>([
+    { id: generateId(), name: '', dueDate: new Date('1999-01-01T00:00:00'), points: 0 },
   ]);
 
   const router = useRouter();
@@ -29,7 +31,7 @@ export default function ScheduleAddForm() {
     setDuration(e.target.value);
   };
 
-  const handleTaskChange = (id: number, field: keyof Task, value: string) => {
+  const handleTaskChange = (id: string, field: keyof ITask, value: any) => {
     setTasks(prevTasks => 
       prevTasks.map(task => 
         task.id === id ? { ...task, [field]: value } : task
@@ -38,21 +40,44 @@ export default function ScheduleAddForm() {
   };
 
   const addNewTask = () => {
-    const newId = Math.max(0, ...tasks.map(task => task.id)) + 1;
-    setTasks([...tasks, { id: newId, name: '', dueDate: '', points: '' }]);
+    setTasks([...tasks, { 
+      id: generateId(), 
+      name: '', 
+      dueDate: new Date('1999-01-01T00:00:00'), 
+      points: 0 
+    }]);
   };
 
-  const removeTask = (id: number) => {
-    setTasks(tasks.filter(task => task.id !== id));
+  const removeTask = (id: string) => {
+    // Only remove the task if there's more than one or if we're not removing the last empty task
+    if (tasks.length > 1) {
+      setTasks(tasks.filter(task => task.id !== id));
+    } else {
+      // If it's the last task, just clear its values instead of removing it
+      setTasks([{ id: generateId(), name: '', dueDate: new Date('1999-01-01T00:00:00'), points: 0 }]);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Filter out any tasks with empty names before submitting
+    const validTasks = tasks.filter(task => task.name.trim() !== '');
+    
+    // Only proceed if there's at least one valid task
+    if (validTasks.length === 0) {
+      alert('Please add at least one task with a name');
+      return;
+    }
+
+    // Transform tasks to match ITask interface (remove the id field)
+    const tasksToSubmit = validTasks.map(({ id, ...rest }) => rest);
+
     const formData = {
       scheduleName,
+      start,
       duration,
-      tasks,
+      tasks: tasksToSubmit,
     };
 
     try {
@@ -72,19 +97,20 @@ export default function ScheduleAddForm() {
       setScheduleName('');
       setDuration('1 Week');
       setTasks([
-        { id: 1, name: '', dueDate: '', points: '' },
+        { id: generateId(), name: '', dueDate: new Date(''), points: 0 },
       ]);
       
-      router.push('/schedules');
+      router.push('/show-items');
     } catch (error) {
       console.error('Error in CreateSchedule!', error);
     }
   };
 
   return (
+    <div className='bg-[#F7D0BC]'>
     <div className="max-w-lg mx-auto mt-10 px-4">
       <Card>
-        <div className="text-2xl font-bold mb-4">ClassCue</div>
+        <div className="text-2xl font-bold mb-4 text-center">ClassCue</div>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="text-center mb-4">
             <input
@@ -99,7 +125,7 @@ export default function ScheduleAddForm() {
           </div>
           
           <div className="mb-4">
-            <p className="text-center mb-2">INSTRUCTIONS: assign priority in ascending order.</p>
+            <p className="text-center mb-2">INSTRUCTIONS: please give each of your tasks a priority score of 1-100 (1 is lowest 100 is highest)</p>
             
             <div className="mb-4">
               <p className="mb-2">Duration:</p>
@@ -144,7 +170,7 @@ export default function ScheduleAddForm() {
               </button>
               
               <div className="mb-2">
-                <p className="font-semibold">Task {task.id}</p>
+                <p className="font-semibold">Task</p>
               </div>
               
               <div className="mb-2">
@@ -162,8 +188,8 @@ export default function ScheduleAddForm() {
                 <label className="block text-sm font-medium mb-1">Due Date:</label>
                 <input
                   type="date"
-                  value={task.dueDate}
-                  onChange={(e) => handleTaskChange(task.id, 'dueDate', e.target.value)}
+                  value={task.dueDate instanceof Date ? task.dueDate.toISOString().split('T')[0] : task.dueDate}
+                  onChange={(e) => handleTaskChange(task.id, 'dueDate', new Date(e.target.value))}
                   className="w-full p-2 border border-gray-300 rounded"
                 />
               </div>
@@ -173,9 +199,11 @@ export default function ScheduleAddForm() {
                 <input
                   type="number"
                   value={task.points}
-                  onChange={(e) => handleTaskChange(task.id, 'points', e.target.value)}
+                  onChange={(e) => handleTaskChange(task.id, 'points', parseInt(e.target.value) || 0)}
                   className="w-full p-2 border border-gray-300 rounded"
                   placeholder="Priority"
+                  min="1"
+                  max="100"
                 />
               </div>
             </div>
@@ -205,6 +233,7 @@ export default function ScheduleAddForm() {
           </div>
         </form>
       </Card>
+    </div>
     </div>
   );
 }

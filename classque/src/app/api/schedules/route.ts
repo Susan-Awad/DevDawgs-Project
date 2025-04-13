@@ -2,21 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '../../../auth';
 import User from '../../../models/userSchema';
 import mongoose from 'mongoose';
-
-// MongoDB connection
-const connectDB = async () => {
-  if (mongoose.connections[0].readyState) {
-    // If already connected, use current connection
-    return;
-  }
-  // Connect to MongoDB
-  await mongoose.connect(process.env.MONGODB_URI as string);
-}
+import connectMongoDB from '../../../../config/mongodb';
 
 export async function POST(req: NextRequest) {
   try {
     // Connect to MongoDB
-    await connectDB();
+    await connectMongoDB();
     
     // Get the current user from the session
     const session = await auth();
@@ -26,7 +17,7 @@ export async function POST(req: NextRequest) {
     }
     
     // Parse the request body
-    const { scheduleName, duration, tasks } = await req.json();
+    const { scheduleName, startDate, duration, tasks } = await req.json();
     
     // Convert duration string to number (1 or 2 weeks)
     const durationInWeeks = duration === '1 Week' ? 1 : 2;
@@ -45,6 +36,7 @@ export async function POST(req: NextRequest) {
         $push: { 
           schedules: {
             title: scheduleName,
+            start: startDate,
             duration: durationInWeeks,
             tasks: formattedTasks
           } 
