@@ -1,31 +1,33 @@
-import Image from "next/image";
 import Card from "./Card";
 import Link from "next/link";
+import { ITask } from "@/models/taskSchema";
 
 interface ItemProps {
-    item: {
-      _id: number;
-      title: string;
-      description: string;
-      url: string;
-    };
+  item: {
+    title: string;
+    start: Date;
+    duration: 1 | 2; // 1 or 2 weeks
+    tasks: ITask[];
+  };
 }
 
-const Item = ({item}:ItemProps) => {
-    return (
-        <Card >
-           <div className="w-full h-68 relative">
-                <Image src={item.url} alt={item.title}  fill className="object-cover rounded-md" />
-            </div>
-            <h2 className="text-lg font-semibold mt-2">{item.title}</h2>
-            {/* <p className="text-gray-600">{item.description}</p> */}
-          <Link
-             href={`/show-item/${item._id}`}
-              className="bg-red-700 text-white px-4 py-2 rounded hover:bg-red-800 mt-4 inline-block"
-           >
-             more...
-           </Link>
-        </Card>
-    );
+const Item = ({ item }: ItemProps) => {
+  return (
+    <Card>
+      <div className="w-full h-68 relative">
+      </div>
+      <h2 className="text-lg font-semibold mt-2">{item.title}</h2>
+      <p className="text-gray-600">
+        Start: {new Date(item.start).toLocaleDateString()}
+      </p>
+      <p className="text-gray-600">
+        Duration: {item.duration} week{item.duration == 2 ? 's' : ''}
+      </p>
+      <p className="text-gray-600">
+        Tasks: {item.tasks?.length || 0}
+      </p>
+    </Card>
+  );
 }
+
 export default Item;

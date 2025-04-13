@@ -58,3 +58,29 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Error creating schedule' }, { status: 500 });
   }
 }
+
+export async function GET() {
+    try {
+      await connectMongoDB();
+      
+      // Get the current user from the session
+      const session = await auth();
+      
+      if (!session || !session.user?.email) {
+        return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
+      }
+      
+      // Find the user and retrieve their schedules
+      const user = await User.findOne({ email: session.user.email });
+      
+      if (!user) {
+        return NextResponse.json({ error: 'User not found' }, { status: 404 });
+      }
+      
+      // Return the schedules as items
+      return NextResponse.json({ items: user.schedules });
+    } catch (error) {
+      console.error('Error fetching schedules:', error);
+      return NextResponse.json({ error: 'Error fetching schedules' }, { status: 500 });
+  }
+}
