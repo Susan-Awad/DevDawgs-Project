@@ -4,7 +4,7 @@ import mongoose, { Document, Schema, Model } from "mongoose";
 export interface ITask {
     name: string;
     dueDate: Date;
-    points: number; // For priority
+    points: number | undefined; // For priority
   }
   
   // Define the Task schema
