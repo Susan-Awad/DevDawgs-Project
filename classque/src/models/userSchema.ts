@@ -28,6 +28,7 @@ const scheduleSchema = new Schema<ISchedule>({
   tasks: [taskSchema]
 });
 
+// Define the User interface
 export interface IUser extends Document {
   username: string;
   email: string;
@@ -35,6 +36,7 @@ export interface IUser extends Document {
   schedules: ISchedule[];
 }
 
+// Define the User schema
 const userSchema = new Schema<IUser>({
   username: { type: String, required: true },
   email: { type: String, required: true, unique: true },

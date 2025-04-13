@@ -4,6 +4,8 @@ import NextAuth from "next-auth";
 
 const { auth } = NextAuth(authConfig);
 
+// used to restrict pathways that the user can access based on authorization.
+// specifically, the unauthorized user can only access the home page and login/register.
 const middleware = async (request: NextRequest) => {
     const { pathname } = request.nextUrl;
     const session = await auth();

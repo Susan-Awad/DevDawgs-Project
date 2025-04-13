@@ -5,6 +5,8 @@ import bcrypt from "bcryptjs";
 import User from "./models/userSchema";
 import connectMongoDB from "../config/mongodb";
 
+
+// used for comparing the credentials of the user trying to login and the database.
 export const {
     handlers: { GET, POST },
     auth,
