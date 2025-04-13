@@ -98,7 +98,7 @@ const SignupForm = () => {
     type="submit"
     className="bg-[#6A3636] text-white rounded px-4 py-2 mt-2 hover:bg-[#5A3636] transition"
   >
-    Signup
+    Register
   </button>
 </form>
 <p className="my-3 text-center">
