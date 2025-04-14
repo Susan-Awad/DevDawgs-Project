@@ -5,6 +5,7 @@ import {useState, useEffect} from 'react';
 
 export default function Items() {
 
+    // Collects the schedule to display
     const [schedules, setSchedules] = useState([]);
     useEffect(() => {
         const fetchSchedules = async () => {
@@ -40,9 +41,9 @@ export default function Items() {
                         </Link>
                     </div>
                     <hr/><br></br>
-                    <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
+                    <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
                         {schedules.map((item, k) => (  
-                        <Item item={item} key={k}  />
+                        <Item item={item} key={k} />
                     ))}
                         
                     </div>

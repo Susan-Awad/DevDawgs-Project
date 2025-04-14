@@ -6,8 +6,9 @@ import Item from './Item'
 import {useState, useEffect} from 'react';
 import initialData from '../app/data/initialData.json'
 
-const Welcome = () => {     
+const Welcome = () => {
 
+    // Load the json file and map it into tasks
     const initial = initialData.flat().map((item) => ({
         ...item,
         start: new Date(item.start),

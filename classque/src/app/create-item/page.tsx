@@ -1,20 +1,18 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import Card from '../../components/Card';
 import { ITask } from '../../models/taskSchema';
 import axios from 'axios';
 
 // Extended task interface with id
 interface ITaskWithId extends ITask {
-  id: string;
+  _id: string;
 }
 
 const API_URL = 'https://api.unsplash.com/photos/random';
 const apiKey = process.env.NEXT_PUBLIC_UNSPLASH_API_KEY;
-// Function to generate a unique ID
-const generateId = () => Math.random().toString(36).substring(2, 9);
 
 export default function ScheduleAddForm() {
   const [scheduleName, setScheduleName] = useState('');
@@ -22,11 +20,11 @@ export default function ScheduleAddForm() {
   const [duration, setDuration] = useState('1 Week');
   const [image, setImage] = useState('');
   const [imageUrl, setImageUrl] = useState<string>('');
-  const [tasks, setTasks] = useState<ITaskWithId[]>([]);
+  const [tasks, setTasks] = useState<ITask[]>([]);
 
   useEffect(() => {
     setTasks([
-      { id: generateId(), 
+      { 
         name: '', 
         dueDate: new Date('2025-01-01T00:00:00'), 
         points: undefined,
@@ -35,6 +33,8 @@ export default function ScheduleAddForm() {
   }, []);
 
   const router = useRouter();
+  const params = useParams();
+  const id = params?.id as string;
 
   const handleScheduleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setScheduleName(e.target.value);
@@ -44,10 +44,10 @@ export default function ScheduleAddForm() {
     setDuration(e.target.value);
   };
 
-  const handleTaskChange = (id: string, field: keyof ITask, value: any) => {
-    setTasks(prevTasks => 
-      prevTasks.map(task => 
-        task.id === id ? { ...task, [field]: value } : task
+  const handleTaskChange = (taskId: string, field: keyof ITask, value: any) => {
+    setTasks(prev =>
+      prev.map(task =>
+        id === taskId ? { ...task, [field]: value } : task
       )
     );
   };
@@ -57,8 +57,7 @@ export default function ScheduleAddForm() {
   };
 
   const addNewTask = () => {
-    setTasks([...tasks, { 
-      id: generateId(), 
+    setTasks([...tasks, {  
       name: '', 
       dueDate: new Date('2025-01-01T00:00:00'), 
       points: 0
@@ -68,10 +67,10 @@ export default function ScheduleAddForm() {
   const removeTask = (id: string) => {
     // Only remove the task if there's more than one or if we're not removing the last empty task
     if (tasks.length > 1) {
-      setTasks(tasks.filter(task => task.id !== id));
+      setTasks(tasks.filter(task => id !== id));
     } else {
       // If it's the last task, just clear its values instead of removing it
-      setTasks([{ id: generateId(), name: '', dueDate: new Date(), points: undefined }]);
+      setTasks([{ name: '', dueDate: new Date(), points: undefined }]);
     }
   };
 
@@ -93,12 +92,10 @@ export default function ScheduleAddForm() {
       &count=1&client_id=${apiKey}`
     );
     const fetchedImage = result.data[0]?.urls?.regular;
-    console.log(JSON.stringify(result.data[0]));
-    console.log(fetchedImage);
     setImageUrl(fetchedImage);
 
     // Transform tasks to match ITask interface (remove the id field)
-    const tasksToSubmit = validTasks.map(({ id, ...rest }) => rest);
+    const tasksToSubmit = validTasks.map(({ ...rest }) => rest);
 
     const formData = {
       scheduleName,
@@ -128,7 +125,7 @@ export default function ScheduleAddForm() {
       setImage('');
       setImageUrl('');
       setTasks([
-        { id: generateId(), name: '', dueDate: new Date(''), points: 0 },
+        { name: '', dueDate: new Date(''), points: 0 },
       ]);
       
       router.push('/show-items');
@@ -200,10 +197,10 @@ export default function ScheduleAddForm() {
           </div>
 
           {tasks.map((task) => (
-            <div key={task.id} className="border border-gray-200 p-4 rounded-md relative mb-4">
+            <div key={id} className="border border-gray-200 p-4 rounded-md relative mb-4">
               <button 
                 type="button" 
-                onClick={() => removeTask(task.id)}
+                onClick={() => removeTask(id)}
                 className="absolute right-2 top-2 text-gray-500 hover:text-red-500"
               >
                 {/* Code for the trash can logo*/}
@@ -222,7 +219,7 @@ export default function ScheduleAddForm() {
                 <input
                   type="text"
                   value={task.name}
-                  onChange={(e) => handleTaskChange(task.id, 'name', e.target.value)}
+                  onChange={(e) => handleTaskChange(id, 'name', e.target.value)}
                   className="w-full p-2 border border-gray-300 rounded"
                   placeholder="Name"
                 />
@@ -234,7 +231,7 @@ export default function ScheduleAddForm() {
                   type="date"
                   value={task.dueDate instanceof Date ? task.dueDate.toISOString().split('T')[0] : task.dueDate}
                   placeholder=''
-                  onChange={(e) => handleTaskChange(task.id, 'dueDate', new Date(e.target.value))}
+                  onChange={(e) => handleTaskChange(id, 'dueDate', new Date(e.target.value))}
                   className="w-full p-2 border border-gray-300 rounded"
                 />
               </div>
@@ -244,7 +241,7 @@ export default function ScheduleAddForm() {
                 <input
                   type="number"
                   value={task.points}
-                  onChange={(e) => handleTaskChange(task.id, 'points', parseInt(e.target.value) || 0)}
+                  onChange={(e) => handleTaskChange(id, 'points', parseInt(e.target.value) || 0)}
                   className="w-full p-2 border border-gray-300 rounded"
                   placeholder="Priority"
                   min="1"
