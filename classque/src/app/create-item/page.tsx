@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Card from '../../components/Card';
 import { ITask } from '../../models/taskSchema';
@@ -12,18 +12,27 @@ interface ITaskWithId extends ITask {
 }
 
 const API_URL = 'https://api.unsplash.com/photos/random';
-const apiKey = process.env.REACT_APP_API_KEY;
+const apiKey = process.env.NEXT_PUBLIC_UNSPLASH_API_KEY;
 // Function to generate a unique ID
 const generateId = () => Math.random().toString(36).substring(2, 9);
 
 export default function ScheduleAddForm() {
   const [scheduleName, setScheduleName] = useState('');
-  const [start, setStart] = useState();
+  const [start, setStart] = useState(new Date());
   const [duration, setDuration] = useState('1 Week');
-  const [image, setImage] = useState('wallpaper');
-  const [tasks, setTasks] = useState<ITaskWithId[]>([
-    { id: generateId(), name: '', dueDate: new Date('2025-01-01T00:00:00'), points: undefined },
-  ]);
+  const [image, setImage] = useState('');
+  const [imageUrl, setImageUrl] = useState<string>('');
+  const [tasks, setTasks] = useState<ITaskWithId[]>([]);
+
+  useEffect(() => {
+    setTasks([
+      { id: generateId(), 
+        name: '', 
+        dueDate: new Date('2025-01-01T00:00:00'), 
+        points: undefined,
+      },
+    ]);
+  }, []);
 
   const router = useRouter();
 
@@ -43,21 +52,8 @@ export default function ScheduleAddForm() {
     );
   };
 
-  const fetchImages = async () => {
-    try {
-      const result = await axios.get(
-        `${API_URL}?query=${image}
-        $count=1$client_id=${apiKey}`
-      );
-      setImage(result.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setImage(e.target.value);
-    fetchImages();
   };
 
   const addNewTask = () => {
@@ -75,7 +71,7 @@ export default function ScheduleAddForm() {
       setTasks(tasks.filter(task => task.id !== id));
     } else {
       // If it's the last task, just clear its values instead of removing it
-      setTasks([{ id: generateId(), name: '', dueDate: new Date(""), points: undefined }]);
+      setTasks([{ id: generateId(), name: '', dueDate: new Date(), points: undefined }]);
     }
   };
 
@@ -91,6 +87,14 @@ export default function ScheduleAddForm() {
       return;
     }
 
+    // Access API to fetch image based on user input
+    const result = await axios.get(
+      `${API_URL}?query=${image}
+      &count=1&client_id=${apiKey}`
+    );
+    const fetchedImage = result.data[0]?.urls?.regular;
+    setImageUrl(fetchedImage);
+
     // Transform tasks to match ITask interface (remove the id field)
     const tasksToSubmit = validTasks.map(({ id, ...rest }) => rest);
 
@@ -99,6 +103,7 @@ export default function ScheduleAddForm() {
       start,
       duration,
       tasks: tasksToSubmit,
+      imageUrl: fetchedImage,
     };
 
     try {
@@ -116,7 +121,10 @@ export default function ScheduleAddForm() {
 
       // Reset form
       setScheduleName('');
+      setStart(new Date());
       setDuration('1 Week');
+      setImage('');
+      setImageUrl('');
       setTasks([
         { id: generateId(), name: '', dueDate: new Date(''), points: 0 },
       ]);
@@ -183,7 +191,7 @@ export default function ScheduleAddForm() {
               type="text"
               value={image}
               onChange={handleImageChange}
-              placeholder="image"
+              placeholder="image keyword"
               required
               className="w-full p-2 border border-gray-300 rounded text-center text-lg font-medium"
             />
