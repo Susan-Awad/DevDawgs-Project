@@ -9,17 +9,17 @@ interface ItemProps {
     start: Date;
     duration: 1 | 2; // 1 or 2 weeks
     tasks: ITask[];
+    imageUrl: string;
   };
-  imageUrl?: string;
 }
 
-const Item = ({ item, imageUrl }: ItemProps) => {
+const Item = ({ item }: ItemProps) => {
   return (
     <Card>
       <div className="w-full h-68 relative rounded overflow-hidden">
-  {imageUrl ? (
+  {item.imageUrl ? (
     <img
-      src={imageUrl}
+      src={item.imageUrl}
       alt="Schedule preview"
       className="w-full h-full object-cover"
     />

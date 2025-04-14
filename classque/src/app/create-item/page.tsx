@@ -93,6 +93,8 @@ export default function ScheduleAddForm() {
       &count=1&client_id=${apiKey}`
     );
     const fetchedImage = result.data[0]?.urls?.regular;
+    console.log(JSON.stringify(result.data[0]));
+    console.log(fetchedImage);
     setImageUrl(fetchedImage);
 
     // Transform tasks to match ITask interface (remove the id field)
