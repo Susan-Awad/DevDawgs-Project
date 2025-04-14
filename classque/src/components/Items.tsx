@@ -3,12 +3,11 @@ import Item from "./Item";
 import Link from 'next/link';
 import {useState, useEffect} from 'react';
 
-   export default function Items() {
+export default function Items() {
 
     const [schedules, setSchedules] = useState([]);
-  
-   useEffect(() => {
-      const fetchSchedules = async () => {
+    useEffect(() => {
+        const fetchSchedules = async () => {
         try {
           const response = await fetch('/api/schedules');
           if (!response.ok) {
@@ -21,19 +20,17 @@ import {useState, useEffect} from 'react';
         } catch (error) {
               console.log('Error from ShowItemList:', error);
         }
-      };
-  
-      fetchSchedules();
+    };
+    fetchSchedules();
+    
     }, []);
 
     return (
-    
         <section className='px-4 py-6'>
             <div className='container-xl lg:container m-auto px-4 py-6'>
-
- 
-                {schedules.length === 0 ? (
+                {schedules.length === 0 ? (<>
                     <p>No schedules created yet. Let's get to work!</p>
+                    </>
                 ) : (<>
                     <div className="flex items-center justify-between mb-4">
                         <h1 className="text-lg font-semibold mt-2">Your Schedules</h1>
@@ -52,14 +49,12 @@ import {useState, useEffect} from 'react';
                     </>
                 )}
             
-            <Link href={`/create-item`}
-                   className="bg-[#6A3636] text-white px-4 py-2 rounded hover:bg-[#5A3636] mt-4 inline-block"
-                   
-                > Create New Schedule
+                <Link href={`/create-item`}
+                   className="bg-[#6A3636] text-white px-4 py-2 rounded hover:bg-[#5A3636] mt-4 inline-block">
+                    Create New Schedule
                 </Link>
             </div>
         </section>
-
     );
     
 };
