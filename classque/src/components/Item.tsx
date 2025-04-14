@@ -1,6 +1,7 @@
 import Card from "./Card";
 import Link from "next/link";
 import { ITask } from "@/models/taskSchema";
+import { Url } from "next/dist/shared/lib/router/router";
 
 interface ItemProps {
   item: {
@@ -9,13 +10,25 @@ interface ItemProps {
     duration: 1 | 2; // 1 or 2 weeks
     tasks: ITask[];
   };
+  imageUrl?: string;
 }
 
-const Item = ({ item }: ItemProps) => {
+const Item = ({ item, imageUrl }: ItemProps) => {
   return (
     <Card>
-      <div className="w-full h-68 relative">
-      </div>
+      <div className="w-full h-68 relative rounded overflow-hidden">
+  {imageUrl ? (
+    <img
+      src={imageUrl}
+      alt="Schedule preview"
+      className="w-full h-full object-cover"
+    />
+  ) : (
+    <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
+      No image available
+    </div>
+  )}
+</div>
       <h2 className="text-lg font-semibold mt-2">{item.title}</h2>
       <p className="text-gray-600">
         Start: {new Date(item.start).toLocaleDateString()}
