@@ -4,13 +4,15 @@ import NextAuth from "next-auth";
 
 const { auth } = NextAuth(authConfig);
 
+// used to restrict pathways that the user can access based on authorization.
+// specifically, the unauthorized user can only access the home page and login/register.
 const middleware = async (request: NextRequest) => {
     const { pathname } = request.nextUrl;
     const session = await auth();
     const isAuthenticated = !!session?.user;
     console.log(isAuthenticated, pathname); 
 
-    const publicPaths = ["/", "/show-item", "/show-items", "/api/items"];
+    const publicPaths = ["/", "/api/items"];
 
     if (!isAuthenticated && !publicPaths.includes(pathname)) {
         return NextResponse.redirect(new URL("/", request.url));
@@ -22,7 +24,8 @@ const middleware = async (request: NextRequest) => {
 
 export const config = {
   matcher: [
-    "/create-item/:path", // path not being restricted
+    "/show-items",
+    "/create-item/:path*",
     "/update-item/:path*",
     "/delete-item/:path*",
   ],
