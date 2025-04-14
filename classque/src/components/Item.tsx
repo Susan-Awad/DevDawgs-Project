@@ -17,21 +17,25 @@ const Item = ({ item }: ItemProps) => {
   return (
     <Card>
       <div className="w-full h-68 relative rounded overflow-hidden">
-  {item.imageUrl ? (
-    <img
-      src={item.imageUrl}
-      alt="Schedule preview"
-      className="w-full h-full object-cover"
-    />
-  ) : (
-    <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
-      No image available
-    </div>
-  )}
-</div>
+        {item.imageUrl ? (
+          <img
+            src={item.imageUrl}
+            alt="Schedule preview"
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
+            No image available
+          </div>
+        )}
+      </div>
+
+      <div>
       <h2 className="text-lg font-semibold mt-2">{item.title}</h2>
+      
+      </div>
       <p className="text-gray-600">
-        Start: {new Date(item.start).toLocaleDateString()}
+        Start: {new Date().toLocaleDateString()}
       </p>
       <p className="text-gray-600">
         Duration: {item.duration} week{item.duration == 2 ? 's' : ''}
