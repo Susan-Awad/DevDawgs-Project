@@ -6,6 +6,7 @@ export interface ISchedule {
     title: string;
     start: Date;
     duration: 1 | 2; // 1 or 2 weeks
+    imageUrl: string;
     tasks: ITask[];
   }
   
@@ -14,6 +15,7 @@ export const scheduleSchema = new Schema<ISchedule>({
     title: { type: String, required: true },
     start: { type: Date, required: true },
     duration: { type: Number, required: true, enum: [1, 2] },
+    imageUrl: {type: String, required: true},
     tasks: [taskSchema]
   });
 

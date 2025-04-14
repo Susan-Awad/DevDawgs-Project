@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
     }
     
     // Parse the request body
-    const { scheduleName, startDate, duration, tasks } = await req.json();
+    const { scheduleName, startDate, duration, imageUrl, tasks } = await req.json();
     
     // Convert duration string to number (1 or 2 weeks)
     const durationInWeeks = duration === '1 Week' ? 1 : 2;
@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
       dueDate: new Date(task.dueDate),
       points: parseInt(task.points) || 0
     }));
-    
+
     // Find the user and update their schedules array
     const updatedUser = await User.findOneAndUpdate(
       { email: session.user.email },
@@ -38,7 +38,8 @@ export async function POST(req: NextRequest) {
             title: scheduleName,
             start: startDate,
             duration: durationInWeeks,
-            tasks: formattedTasks
+            tasks: formattedTasks,
+            imageUrl: imageUrl,
           } 
         } 
       },
