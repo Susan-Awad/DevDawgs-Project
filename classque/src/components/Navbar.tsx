@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { Session } from "next-auth";
 import { doLogout } from "../app/actions/index";
 
-interface Session {
+interface SSession {
   user?: {
     name?: string;
     email?: string;
@@ -15,7 +15,7 @@ interface Session {
   };
 }
 interface NavbarProps {
-  session: Session | null;
+  session: SSession | null;
 }
 
 const Navbar = ({ session }: NavbarProps) => {
