@@ -1,7 +1,7 @@
 # DevDawgs-Project
 
 ## Team Name and Members
-- Awad, Susan:
+- Awad, Susan: https://github.com/Susan-Awad
 - Mutongi, Michael: https://github.com/mem23074
 - Patel, Jaisal: https://github.com/jaip1127
 - Runckel, David: https://github.com/DavidRunckel
