@@ -1,11 +1,12 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { FormEvent } from "react";
+import { useState, FormEvent } from "react";
 import Link from 'next/link';
 
 const SignupForm = () => {
   const router = useRouter();
+  const [error, setError] = useState<string>("");
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
@@ -39,7 +40,8 @@ const SignupForm = () => {
         console.log(`Failed to register: ${response.statusText}`);
       }
     } catch (e: any) {
-      console.log(e.message || "An error occurred during registration.");
+      console.error(e);
+      setError("An error occurred during registration.");
     }
   }
 
@@ -48,6 +50,7 @@ const SignupForm = () => {
         <div className="grid mt-8 justify-items-center"> 
             <div className="shadow-lg p-5 rounded-lg border-t-4 bg-white border-[#6A3636]">
                 <h1 className="text-xl text-slate-600 font-bold my-4">You're new, welcome!</h1>
+                {error && <div className="text-lg text-red-500">{error}</div>}
       <form
   onSubmit={handleSubmit}
   className="my-8 max-w-md mx-auto flex flex-col gap-4 border p-6 border-gray-300 rounded-md shadow-sm bg-white"

@@ -1,4 +1,7 @@
 // /app/delete-item/page.tsx
+
+
+// WE DO NOT NEED THIS PAGE, SINCE DELETE IS DONE IN THE ITEMS PAGE
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';

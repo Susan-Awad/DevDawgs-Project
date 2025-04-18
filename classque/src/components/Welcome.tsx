@@ -6,8 +6,9 @@ import Item from './Item'
 import {useState, useEffect} from 'react';
 import initialData from '../app/data/initialData.json'
 
-const Welcome = () => {     
+const Welcome = () => {
 
+    // Load the json file and map it into tasks
     const initial = initialData.flat().map((item) => ({
         ...item,
         start: new Date(item.start),
@@ -34,7 +35,7 @@ const Welcome = () => {
             <hr/><br/>
             <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
                     {initial.map((item, k) => (  
-                    <Item item={item} key={k}  />
+                    <Item item={item} key={k} isExample={true} />
                 ))};
             </div>
         </div>

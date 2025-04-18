@@ -12,7 +12,7 @@ const middleware = async (request: NextRequest) => {
     const isAuthenticated = !!session?.user;
     console.log(isAuthenticated, pathname); 
 
-    const publicPaths = ["/", "/api/items"];
+    const publicPaths = ["/"];
 
     if (!isAuthenticated && !publicPaths.includes(pathname)) {
         return NextResponse.redirect(new URL("/", request.url));
@@ -27,7 +27,6 @@ export const config = {
     "/show-items",
     "/create-item/:path*",
     "/update-item/:path*",
-    "/delete-item/:path*",
   ],
 };
 
