@@ -1,5 +1,7 @@
 'use client';
 
+// WE DO NOT NEED THIS PAGE EITHER
+
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
