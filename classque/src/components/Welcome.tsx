@@ -6,8 +6,9 @@ import Item from './Item'
 import {useState, useEffect} from 'react';
 import initialData from '../app/data/initialData.json'
 
-const Welcome = () => {     
+const Welcome = () => {
 
+    // Load the json file and map it into tasks
     const initial = initialData.flat().map((item) => ({
         ...item,
         start: new Date(item.start),
@@ -27,14 +28,16 @@ const Welcome = () => {
                     <h2 className="text-2l font-bold text-gray-800">Our intuitive scheduling platform makes it easy to manage your work-life balance, all in just a few clicks. Being a student just got a whole lot easier!</h2>
                 </div>
             </div>
-            <Image className='w-auto' src={splash} alt='ClassCue logo'/>
+            <div>
+                <Image className='w-auto' src={splash} alt='ClassCue logo'/>
+            </div>
         </div>
         <div className="bg-white bg-opacity-80 p-8 rounded-lg shadow-md">
             <p className="text-2xl font-bold mb-4 text-center">Example Schedules</p>
             <hr/><br/>
             <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
                     {initial.map((item, k) => (  
-                    <Item item={item} key={k}  />
+                    <Item item={item} key={k} isExample={true} />
                 ))};
             </div>
         </div>

@@ -3,7 +3,6 @@ import Link from "next/link";
 import { ITask } from "@/models/taskSchema";
 import { useRouter, useParams } from 'next/navigation';
 import EditIcon from '../assets/edit2.png'
-import { Url } from "next/dist/shared/lib/router/router";
 
 interface ItemProps {
   item: {
@@ -14,13 +13,18 @@ interface ItemProps {
     tasks: ITask[];
     imageUrl: string;
   };
+  onDelete?: (id: string) => void // for delete
+  isExample?: boolean; // used to ensure no one can delete sample schedules
 }
 
-const Item = ({ item }: ItemProps) => {
+const Item = ({ item, onDelete, isExample=false }: ItemProps) => {
   const router = useRouter();
 
   // Deletes schedule based on id
   const handleDelete = async () => {
+    // ensures if schedule is an example schedule it can't be deleted.
+    if (isExample) return;
+
     try {
       const response = await fetch(`../api/schedules/${item._id}`, {
         method: 'DELETE',
@@ -30,8 +34,10 @@ const Item = ({ item }: ItemProps) => {
         throw new Error('Failed to delete item.');
       };
 
-      router.push('/show-items');
-      router.refresh(); // Refrreshs page after deletion
+      if (onDelete) {
+        onDelete(item._id);
+      }
+
     } catch (error) {
       console.log('Failed to delete item,', error);
     }
@@ -60,10 +66,13 @@ const Item = ({ item }: ItemProps) => {
           </p>
         </div>
         <div>
+        {!isExample && ( // hides edit and delete from view if schedule is an example
         <Link href={`/update-item/${item._id}`}
           className="text-white px-2 py-0.5 rounded hover:bg-[#D3D3D3] mt-4 inline-block">
           <img className="w-5" src={EditIcon.src} alt="edit"/>
         </Link>
+        )}
+        {!isExample && (
         <button 
           type="button" 
           onClick={() => handleDelete()}
@@ -75,6 +84,7 @@ const Item = ({ item }: ItemProps) => {
             <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"></path>
           </svg>
         </button>
+        )}
         </div>
       </div>
       <div className="max-h-30 overflow-y-scroll">

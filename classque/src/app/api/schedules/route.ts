@@ -1,3 +1,4 @@
+// route for all schedules in a user object
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '../../../auth';
 import User from '../../../models/userSchema';

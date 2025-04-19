@@ -1,8 +1,10 @@
+// route for specific schedule
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '../../../../auth';
 import connectMongoDB from '../../../../../config/mongodb';
 import User from '../../../../models/userSchema';
 import mongoose from 'mongoose';
+import { format } from 'path';
 
 interface RouteParams {
     params: {id: string};
@@ -58,6 +60,14 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
         };
 
         const updatedData = await request.json();
+        const durationWeeks = updatedData.duration === '1 Week' ? 1 : 2;
+
+        // Format tasks to match schema
+        const formattedTasks = updatedData.tasks.map((task : any) => ({
+            name: task.name,
+            dueDate: new Date(task.dueDate),
+            points: parseInt(task.points) || 0
+          }));
     
         // Convert the string ID to ObjectId
         const scheduleId = new mongoose.Types.ObjectId(id);
@@ -69,8 +79,8 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
             { $set: {
                 "schedules.$.title": updatedData.scheduleName,
                 "schedules.$.start": updatedData.start,
-                "schedules.$.duration": updatedData.duration,
-                "schedules.$.tasks": updatedData.tasks,
+                "schedules.$.duration": durationWeeks,
+                "schedules.$.tasks": formattedTasks,
                 "schedules.$.imageUrl": updatedData.imageUrl
                 } 
             },

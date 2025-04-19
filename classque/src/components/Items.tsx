@@ -2,11 +2,21 @@
 import Item from "./Item";
 import Link from 'next/link';
 import {useState, useEffect} from 'react';
+import { ITask } from "@/models/taskSchema";
+
+interface Schedule {
+    _id: string; // lets the delete handler see an id
+    title: string;
+    start: Date;
+    duration: 1 | 2; // 1 or 2 weeks
+    imageUrl: string;
+    tasks: ITask[];
+}
 
 export default function Items() {
 
     // Collects the schedule to display
-    const [schedules, setSchedules] = useState([]);
+    const [schedules, setSchedules] = useState<Schedule[]>([]);
     useEffect(() => {
         const fetchSchedules = async () => {
         try {
@@ -26,6 +36,13 @@ export default function Items() {
     
     }, []);
 
+    // delete schedule handler
+    const handleDelete = (deletedScheduleId) => {
+        setSchedules(prevSchedules =>
+            prevSchedules.filter(schedule => schedule._id !== deletedScheduleId)
+        );
+    };
+
     return (
         <section className='px-4 py-6'>
             <div className='container-xl lg:container m-auto px-4 py-6'>
@@ -43,7 +60,7 @@ export default function Items() {
                     <hr/><br></br>
                     <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
                         {schedules.map((item, k) => (  
-                        <Item item={item} key={k} />
+                        <Item item={item} key={k} onDelete={handleDelete} isExample={false}/>
                     ))}
                         
                     </div>

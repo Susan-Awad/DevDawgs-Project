@@ -1,8 +1,10 @@
+//create-item page
 'use client';
 
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Card from '../../components/Card';
+import Link from 'next/link';
 import { ITask } from '../../models/taskSchema';
 import axios from 'axios';
 
@@ -31,8 +33,8 @@ export default function ScheduleAddForm() {
     setTasks([
       { _id: '',
         name: '', 
-        dueDate: new Date('2025-01-01T00:00:00'),
-        points: undefined,
+        dueDate: today, 
+        points: 50,
       },
     ]);
   }, []);
@@ -67,7 +69,7 @@ export default function ScheduleAddForm() {
       _id: '',
       name: '', 
       dueDate: today, 
-      points: 0
+      points: 50
     }]);
   };
 
@@ -77,7 +79,8 @@ export default function ScheduleAddForm() {
       setTasks(tasks.filter(task => id !== id));
     } else {
       // If it's the last task, just clear its values instead of removing it
-      setTasks([{ _id: '', name: '', dueDate: new Date(), points: undefined }]);
+      const today = new Date();
+      setTasks([{ id: generateId(), name: '', dueDate: today, points: 50 }]);
     }
   };
 
@@ -160,7 +163,7 @@ export default function ScheduleAddForm() {
       setImage('');
       setImageUrl('');
       setTasks([
-        { _id: '', name: '', dueDate: new Date(''), points: 0 },
+        { id: generateId(), name: '', dueDate: today, points: 50 },
       ]);
       
       router.push('/show-items');
@@ -188,7 +191,7 @@ export default function ScheduleAddForm() {
           </div>
           
           <div className="mb-4">
-            <p className="text-center mb-2">INSTRUCTIONS: please give each of your tasks a priority score of 1-10 (1 is lowest 10 is highest)</p>
+            <p className="text-center mb-2">INSTRUCTIONS: please give each of your tasks a priority score of 1-100 (1 is lowest 100 is highest)</p>
             
             <div className="mb-4">
               <p className="mb-2">Duration:</p>
@@ -274,8 +277,8 @@ export default function ScheduleAddForm() {
                 <label className="block text-sm font-medium mb-1">Priority:</label>
                 <input
                   type="number"
-                  value={task.points || 0}  // Ensure we always have a numeric value
-                  onChange={(e) => handleTaskChange(id, 'points', parseInt(e.target.value) || 0)}
+                  value={task.points || 50}  // Ensure we always have a numeric value
+                  onChange={(e) => handleTaskChange(task.id, 'points', parseInt(e.target.value) || 0)}
                   className="w-full p-2 border border-gray-300 rounded"
                   placeholder="Priority"
                   min="1"
@@ -294,7 +297,11 @@ export default function ScheduleAddForm() {
             </button>
           </div>
           
-          <div className="flex justify-end">
+          <div className="flex items-center justify-between mb-4">
+          <Link href={`/show-items`}
+                   className="bg-[#6A3636] text-white px-6 py-2 rounded hover:bg-[#5A3636]">
+                    Go Back
+                </Link>
             <button
               type="submit"
               className="bg-[#6A3636] text-white px-6 py-2 rounded hover:bg-[#5A3636]"
