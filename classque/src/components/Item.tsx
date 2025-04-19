@@ -83,7 +83,7 @@ const Item = ({ item }: ItemProps) => {
             .slice() // create a shallow copy so you don't mutate the original array
             .sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()) // sort by dueDate
             .map((task, index) => (<>
-              <p key={index} className="text-lg font-semibold mt-2">
+              <p className="text-lg font-semibold mt-2">
                 {new Date(task.dueDate).toLocaleDateString("en-US", {
                   year: "numeric",
                   month: "long",

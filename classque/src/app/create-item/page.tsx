@@ -24,14 +24,14 @@ export default function ScheduleAddForm() {
   const [duration, setDuration] = useState('1 Week');
   const [image, setImage] = useState('');
   const [imageUrl, setImageUrl] = useState<string>('');
-  const [tasks, setTasks] = useState<ITask[]>([]);
+  const [tasks, setTasks] = useState<ITaskWithId[]>([]);
 
   useEffect(() => {
     const today = new Date();
     setTasks([
-      { 
+      { _id: '',
         name: '', 
-        dueDate: new Date('2025-01-01T00:00:00'), 
+        dueDate: new Date('2025-01-01T00:00:00'),
         points: undefined,
       },
     ]);
@@ -64,9 +64,10 @@ export default function ScheduleAddForm() {
   const addNewTask = () => {
     const today = new Date();
     setTasks([...tasks, {  
+      _id: '',
       name: '', 
       dueDate: today, 
-      points: 5
+      points: 0
     }]);
   };
 
@@ -76,7 +77,7 @@ export default function ScheduleAddForm() {
       setTasks(tasks.filter(task => id !== id));
     } else {
       // If it's the last task, just clear its values instead of removing it
-      setTasks([{ name: '', dueDate: new Date(), points: undefined }]);
+      setTasks([{ _id: '', name: '', dueDate: new Date(), points: undefined }]);
     }
   };
 
@@ -159,7 +160,7 @@ export default function ScheduleAddForm() {
       setImage('');
       setImageUrl('');
       setTasks([
-        { name: '', dueDate: new Date(''), points: 0 },
+        { _id: '', name: '', dueDate: new Date(''), points: 0 },
       ]);
       
       router.push('/show-items');

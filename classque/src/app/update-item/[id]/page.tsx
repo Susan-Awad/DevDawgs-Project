@@ -11,7 +11,7 @@ interface ITaskWithId extends ITask {
 export default function UpdateItem() {
     const [scheduleName, setScheduleName] = useState('');
     const [start, setStart] = useState(new Date());
-    const [duration, setDuration] = useState(1);
+    const [duration, setDuration] = useState('1 Week');
     const [image, setImage] = useState('');
     const [imageUrl, setImageUrl] = useState<string>('');
     const [tasks, setTasks] = useState<ITaskWithId[]>([]);
@@ -32,7 +32,7 @@ export default function UpdateItem() {
 
         setScheduleName(task.scheduleName || '');
         setStart(new Date(task.start));
-        setDuration(task.duration || 1);
+        setDuration(task.duration || '1 Week');
         setImage(task.image || '');
         setImageUrl(task.imageUrl || 'https://wallpapers.com/images/featured/ipad-default-th9c4d752f2dzzfs.jpg')
         
@@ -59,7 +59,7 @@ export default function UpdateItem() {
   };
 
   const handleDurationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDuration(Number(e.target.value));
+    setDuration(e.target.value);
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -144,23 +144,23 @@ export default function UpdateItem() {
             <div className="mb-4">
               <p className="mb-2">Duration:</p>
               <div className="flex justify-center gap-4">
-                <label className={`px-4 py-2 rounded-md ${duration === 1 ? 'bg-gray-300' : 'bg-gray-100'}`}>
+                <label className={`px-4 py-2 rounded-md ${duration === '1 Week' ? 'bg-gray-300' : 'bg-gray-100'}`}>
                   <input
                     type="radio"
                     name="duration"
                     value="1 Week"
-                    checked={duration === 1}
+                    checked={duration === '1 Week'}
                     onChange={handleDurationChange}
                     className="mr-2"
                   />
                   1 Week
                 </label>
-                <label className={`px-4 py-2 rounded-md ${duration === 2 ? 'bg-gray-300' : 'bg-gray-100'}`}>
+                <label className={`px-4 py-2 rounded-md ${duration === '2 Week' ? 'bg-gray-300' : 'bg-gray-100'}`}>
                   <input
                     type="radio"
                     name="duration"
                     value="2 Weeks"
-                    checked={duration === 2}
+                    checked={duration === '2 Week'}
                     onChange={handleDurationChange}
                     className="mr-2"
                   />
