@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       message: 'Schedule created successfully',
       schedule: updatedUser.schedules[updatedUser.schedules.length - 1]
     });

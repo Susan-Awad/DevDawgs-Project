@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ITask } from "@/models/taskSchema";
 import { useRouter, useParams } from 'next/navigation';
 import EditIcon from '../assets/edit2.png'
+import {bestSchedule} from '@/util/findSchedule'
 
 interface ItemProps {
   item: {
@@ -62,7 +63,7 @@ const Item = ({ item, onDelete, isExample=false }: ItemProps) => {
         <div>
           <h2 className="text-lg font-semibold mt-2">{item.title}</h2>
           <p className="text-gray-600">
-            Start: {new Date().toLocaleDateString()} | Duration: {item.duration} week{item.duration == 2 ? 's' : ''} | Tasks: {item.tasks?.length || 0}
+            Start: {new Date(item.start).toLocaleDateString()} | Duration: {item.duration} week{item.duration == 2 ? 's' : ''} | Tasks: {item.tasks?.length || 0}
           </p>
         </div>
         <div>
@@ -89,22 +90,32 @@ const Item = ({ item, onDelete, isExample=false }: ItemProps) => {
       </div>
       <div className="max-h-30 overflow-y-scroll">
         <div className="mt-2">
-          {item.tasks
-            .slice() // create a shallow copy so you don't mutate the original array
-            .sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()) // sort by dueDate
-            .map((task, index) => (<>
-              <p key={index} className="text-lg font-semibold mt-2">
-                {new Date(task.dueDate).toLocaleDateString("en-US", {
+          {bestSchedule(item).map((task,index) => {
+            if(!task) {
+              return null;  
+            }
+            
+            const newDate = new Date(item.start);
+            console.log("before addition", newDate)
+            newDate.setDate(newDate.getDate() + task.date);
+            console.log(task.date)
+            console.log(newDate)
+            return (
+              <div key={index}>
+                <p className="text-lg font-semibold mt-2">
+                  {newDate.toLocaleDateString("en-US", {
                   year: "numeric",
                   month: "long",
                   day: "numeric",
-                })}
-              </p>
-              <p className="text-gray-600 mt-2">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{task.name}
-              </p>
-              </>
-            ))}
+                  })}
+                </p>
+                <p className="text-gray-600 mt-2">
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  {task.name}
+                </p>
+              </div>
+              );
+          })}
           </div>      
         </div>
     </Card>

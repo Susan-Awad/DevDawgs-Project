@@ -2,7 +2,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import Card from '../../components/Card';
 import Link from 'next/link';
 import { ITask } from '../../models/taskSchema';
@@ -29,12 +29,9 @@ export default function ScheduleAddForm() {
   const [tasks, setTasks] = useState<ITaskWithId[]>([]);
 
   useEffect(() => {
-    // Initialize with one task that has all fields properly set
-    // new Date() returns the current date so the first task displays today's date.
     const today = new Date();
     setTasks([
-      { 
-        id: generateId(), 
+      { id: generateId(),
         name: '', 
         dueDate: today, 
         points: 50,
@@ -53,8 +50,8 @@ export default function ScheduleAddForm() {
   };
 
   const handleTaskChange = (id: string, field: keyof ITask, value: any) => {
-    setTasks(prevTasks => 
-      prevTasks.map(task => 
+    setTasks(prevTasks =>
+      prevTasks.map(task =>
         task.id === id ? { ...task, [field]: value } : task
       )
     );
@@ -66,8 +63,8 @@ export default function ScheduleAddForm() {
 
   const addNewTask = () => {
     const today = new Date();
-    setTasks([...tasks, { 
-      id: generateId(), 
+    setTasks([...tasks, {  
+      id: generateId(),
       name: '', 
       dueDate: today, 
       points: 50
@@ -111,8 +108,6 @@ export default function ScheduleAddForm() {
         `${API_URL}?query=${encodeURIComponent(image)}&count=1&client_id=${apiKey}`
       );
       const fetchedImage = result.data[0]?.urls?.regular;
-      console.log(JSON.stringify(result.data[0]));
-      console.log(fetchedImage);
       setImageUrl(fetchedImage);
 
       // Transform tasks to match ITask interface (remove the id field)
@@ -144,8 +139,7 @@ export default function ScheduleAddForm() {
       setDuration('1 Week');
       setImage('');
       setImageUrl('');
-      
-      // Reset tasks with proper default values
+
       const today = new Date();
       setTasks([
         { id: generateId(), name: '', dueDate: today, points: 50 },
@@ -155,6 +149,7 @@ export default function ScheduleAddForm() {
     } catch (error) {
       console.error('Error in CreateSchedule!', error);
     }
+    router.push(`/show-items`);
   };
 
   return (
@@ -289,8 +284,7 @@ export default function ScheduleAddForm() {
                 </Link>
             <button
               type="submit"
-              className="bg-[#6A3636] text-white px-6 py-2 rounded hover:bg-[#5A3636]"
-            >
+              className="bg-[#6A3636] text-white px-6 py-2 rounded hover:bg-[#5A3636]">
               Submit
             </button>
           </div>
