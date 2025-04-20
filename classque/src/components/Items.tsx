@@ -37,7 +37,7 @@ export default function Items() {
     }, []);
 
     // delete schedule handler
-    const handleDelete = (deletedScheduleId) => {
+    const handleDelete = (deletedScheduleId: any) => {
         setSchedules(prevSchedules =>
             prevSchedules.filter(schedule => schedule._id !== deletedScheduleId)
         );

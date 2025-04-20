@@ -10,7 +10,7 @@ import axios from 'axios';
 
 // Extended task interface with id
 interface ITaskWithId extends ITask {
-  _id: string;
+  id: string;
 }
 
 // image api used for the schedule image
@@ -31,7 +31,7 @@ export default function ScheduleAddForm() {
   useEffect(() => {
     const today = new Date();
     setTasks([
-      { _id: '',
+      { id: generateId(),
         name: '', 
         dueDate: today, 
         points: 50,
@@ -40,8 +40,6 @@ export default function ScheduleAddForm() {
   }, []);
 
   const router = useRouter();
-  const params = useParams();
-  const id = params?.id as string;
 
   const handleScheduleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setScheduleName(e.target.value);
@@ -51,10 +49,10 @@ export default function ScheduleAddForm() {
     setDuration(e.target.value);
   };
 
-  const handleTaskChange = (taskId: string, field: keyof ITask, value: any) => {
-    setTasks(prev =>
-      prev.map(task =>
-        id === taskId ? { ...task, [field]: value } : task
+  const handleTaskChange = (id: string, field: keyof ITask, value: any) => {
+    setTasks(prevTasks =>
+      prevTasks.map(task =>
+        task.id === id ? { ...task, [field]: value } : task
       )
     );
   };
@@ -66,7 +64,7 @@ export default function ScheduleAddForm() {
   const addNewTask = () => {
     const today = new Date();
     setTasks([...tasks, {  
-      _id: '',
+      id: generateId(),
       name: '', 
       dueDate: today, 
       points: 50
@@ -76,7 +74,7 @@ export default function ScheduleAddForm() {
   const removeTask = (id: string) => {
     // Only remove the task if there's more than one
     if (tasks.length > 1) {
-      setTasks(tasks.filter(task => id !== id));
+      setTasks(tasks.filter(task => task.id !== id));
     } else {
       // If it's the last task, just clear its values instead of removing it
       const today = new Date();
@@ -104,37 +102,16 @@ export default function ScheduleAddForm() {
       return;
     }
 
-    // Access API to fetch image based on user input
-    const result = await axios.get(
-      `${API_URL}?query=${image}
-      &count=1&client_id=${apiKey}`
-    );
-    const fetchedImage = result.data[0]?.urls?.regular;
-    setImageUrl(fetchedImage);
-
-    // Transform tasks to match ITask interface (remove the id field)
-    const tasksToSubmit = validTasks.map(({ ...rest }) => rest);
-
-    const formData = {
-      scheduleName,
-      start,
-      duration,
-      tasks: tasksToSubmit,
-      imageUrl: fetchedImage,
-    };
-
     try {
       // Access API to fetch image based on user input
       const result = await axios.get(
         `${API_URL}?query=${encodeURIComponent(image)}&count=1&client_id=${apiKey}`
       );
       const fetchedImage = result.data[0]?.urls?.regular;
-      console.log(JSON.stringify(result.data[0]));
-      console.log(fetchedImage);
       setImageUrl(fetchedImage);
 
       // Transform tasks to match ITask interface (remove the id field)
-      const tasksToSubmit = validTasks.map(({ ...rest }) => rest);
+      const tasksToSubmit = validTasks.map(({ id, ...rest }) => rest);
 
       const formData = {
         scheduleName,
@@ -162,6 +139,8 @@ export default function ScheduleAddForm() {
       setDuration('1 Week');
       setImage('');
       setImageUrl('');
+
+      const today = new Date();
       setTasks([
         { id: generateId(), name: '', dueDate: today, points: 50 },
       ]);
@@ -170,6 +149,7 @@ export default function ScheduleAddForm() {
     } catch (error) {
       console.error('Error in CreateSchedule!', error);
     }
+    router.push(`/show-items`);
   };
 
   return (
@@ -235,10 +215,10 @@ export default function ScheduleAddForm() {
           </div>
 
           {tasks.map((task) => (
-            <div key={id} className="border border-gray-200 p-4 rounded-md relative mb-4">
+            <div key={task.id} className="border border-gray-200 p-4 rounded-md relative mb-4">
               <button 
                 type="button" 
-                onClick={() => removeTask(id)}
+                onClick={() => removeTask(task.id)}
                 className="absolute right-2 top-2 text-gray-500 hover:text-red-500"
               >
                 {/* Code for the trash can logo*/}
@@ -257,7 +237,7 @@ export default function ScheduleAddForm() {
                 <input
                   type="text"
                   value={task.name}
-                  onChange={(e) => handleTaskChange(id, 'name', e.target.value)}
+                  onChange={(e) => handleTaskChange(task.id, 'name', e.target.value)}
                   className="w-full p-2 border border-gray-300 rounded"
                   placeholder="Name"
                 />
@@ -268,7 +248,7 @@ export default function ScheduleAddForm() {
                 <input
                   type="date"
                   value={formatDateForInput(task.dueDate)}
-                  onChange={(e) => handleTaskChange(id, 'dueDate', new Date(e.target.value))}
+                  onChange={(e) => handleTaskChange(task.id, 'dueDate', new Date(e.target.value))}
                   className="w-full p-2 border border-gray-300 rounded"
                 />
               </div>
@@ -304,8 +284,7 @@ export default function ScheduleAddForm() {
                 </Link>
             <button
               type="submit"
-              className="bg-[#6A3636] text-white px-6 py-2 rounded hover:bg-[#5A3636]"
-            >
+              className="bg-[#6A3636] text-white px-6 py-2 rounded hover:bg-[#5A3636]">
               Submit
             </button>
           </div>

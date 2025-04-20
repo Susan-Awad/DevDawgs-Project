@@ -92,7 +92,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
             return NextResponse.json({ error: 'Schedule not found' }, { status: 404 });
         };
 
-        return NextResponse.json({ 
+        return NextResponse.json({
             message: 'Schedule updated successfully', 
             schedule: result.schedules[0] 
         });

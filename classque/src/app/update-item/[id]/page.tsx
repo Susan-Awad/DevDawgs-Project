@@ -140,8 +140,6 @@ export default function UpdateItem() {
           `${API_URL}?query=${encodeURIComponent(image)}&count=1&client_id=${apiKey}`
         );
         fetchedImage = result.data[0]?.urls?.regular;
-        console.log(JSON.stringify(result.data[0]));
-        console.log(fetchedImage);
       }
 
       // Transform tasks to match ITask interface (remove the id field)
@@ -301,9 +299,9 @@ export default function UpdateItem() {
         
           <div className="flex items-center justify-between mb-4">
           <Link href={`/show-items`}
-                   className="bg-[#6A3636] text-white px-6 py-2 rounded hover:bg-[#5A3636]">
-                    Go Back
-                </Link>
+              className="bg-[#6A3636] text-white px-6 py-2 rounded hover:bg-[#5A3636]">
+              Go Back
+          </Link>
             <button
               type="submit"
               className="bg-[#6A3636] text-white px-6 py-2 rounded hover:bg-[#5A3636]">
