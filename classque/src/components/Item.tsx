@@ -1,6 +1,6 @@
 import Card from "./Card";
 import Link from "next/link";
-import { ITask } from "@/models/taskSchema";
+import { ITask, taskSchema } from "@/models/taskSchema";
 import { useRouter, useParams } from 'next/navigation';
 import EditIcon from '../assets/edit2.png'
 import {bestSchedule} from '@/util/findSchedule'
@@ -44,6 +44,11 @@ const Item = ({ item, onDelete, isExample=false }: ItemProps) => {
     }
   };
 
+  // Ensures there is always a valid start date, defaults to current date
+  if (new Date(item.start).toString() === "Invalid Date") {
+    item.start = new Date()
+  };
+
   return (
     <Card>
       <div className="w-full h-68 relative rounded overflow-hidden">
@@ -61,7 +66,7 @@ const Item = ({ item, onDelete, isExample=false }: ItemProps) => {
       </div>
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h2 className="text-lg font-semibold mt-2">{item.title}</h2>
+          <h2 className="text-3xl font-semibold mt-2">{item.title}</h2>
           <p className="text-gray-600">
             Start: {new Date(item.start).toLocaleDateString()} | Duration: {item.duration} week{item.duration == 2 ? 's' : ''} | Tasks: {item.tasks?.length || 0}
           </p>
@@ -88,33 +93,34 @@ const Item = ({ item, onDelete, isExample=false }: ItemProps) => {
         )}
         </div>
       </div>
-      <div className="max-h-30 overflow-y-scroll">
+      <hr className="pb-4"/>
+      <div className="max-h-40 overflow-y-scroll">
         <div className="mt-2">
-          {bestSchedule(item).map((task,index) => {
-            if(!task) {
+          {bestSchedule(item).map((tasks,index) => {
+            if(!tasks || tasks.length === 0) {
               return null;  
             }
             
-            const newDate = new Date(item.start);
-            console.log("before addition", newDate)
-            newDate.setDate(newDate.getDate() + task.date);
-            console.log(task.date)
-            console.log(newDate)
+            const newDate = new Date(item.start)
+            newDate.setDate(newDate.getDate() + index)
+            
             return (
               <div key={index}>
-                <p className="text-lg font-semibold mt-2">
+                <p className="text-xl font-semibold mt-2"> 
                   {newDate.toLocaleDateString("en-US", {
                   year: "numeric",
                   month: "long",
                   day: "numeric",
                   })}
                 </p>
-                <p className="text-gray-600 mt-2">
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  {task.name}
-                </p>
+                {tasks.map((task, i) => (
+                  <p key={i} className="text-lg text-gray-600 mt-2">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;&nbsp;
+                    {(task as {name: string}).name}
+                  </p>
+                ))}
               </div>
-              );
+              )
           })}
           </div>      
         </div>

@@ -10,6 +10,7 @@ interface RouteParams {
     params: {id: string};
 };
 
+// GET handler: retrieves a specific schedule by ID for the authenticated user
 export async function GET(request:NextRequest, { params }: RouteParams) {
     try {
         await connectMongoDB();
@@ -48,6 +49,7 @@ export async function GET(request:NextRequest, { params }: RouteParams) {
     };
 }
 
+// PUT handler: updates a specific schedule by ID for the authenticated user
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
     try {
         await connectMongoDB();
@@ -102,6 +104,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     }
 }
 
+// DELETE handler: removes a specific schedule by ID from the authenticated user's schedules
 export async function DELETE(request:NextRequest, { params }: RouteParams) {
     try {
         await connectMongoDB();
