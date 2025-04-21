@@ -66,7 +66,7 @@ const Item = ({ item, onDelete, isExample=false }: ItemProps) => {
       </div>
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h2 className="text-lg font-semibold mt-2">{item.title}</h2>
+          <h2 className="text-3xl font-semibold mt-2">{item.title}</h2>
           <p className="text-gray-600">
             Start: {new Date(item.start).toLocaleDateString()} | Duration: {item.duration} week{item.duration == 2 ? 's' : ''} | Tasks: {item.tasks?.length || 0}
           </p>
@@ -93,7 +93,8 @@ const Item = ({ item, onDelete, isExample=false }: ItemProps) => {
         )}
         </div>
       </div>
-      <div className="max-h-30 overflow-y-scroll">
+      <hr className="pb-4"/>
+      <div className="max-h-40 overflow-y-scroll">
         <div className="mt-2">
           {bestSchedule(item).map((tasks,index) => {
             if(!tasks || tasks.length === 0) {
@@ -105,7 +106,7 @@ const Item = ({ item, onDelete, isExample=false }: ItemProps) => {
             
             return (
               <div key={index}>
-                <p className="text-lg font-semibold mt-2">
+                <p className="text-xl font-semibold mt-2"> 
                   {newDate.toLocaleDateString("en-US", {
                   year: "numeric",
                   month: "long",
@@ -113,8 +114,8 @@ const Item = ({ item, onDelete, isExample=false }: ItemProps) => {
                   })}
                 </p>
                 {tasks.map((task, i) => (
-                  <p key={i} className="text-gray-600 mt-2">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <p key={i} className="text-lg text-gray-600 mt-2">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&rarr;&nbsp;
                     {(task as {name: string}).name}
                   </p>
                 ))}
