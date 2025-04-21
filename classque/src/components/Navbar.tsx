@@ -39,12 +39,12 @@ const Navbar = ({ session }: NavbarProps) => {
           <div className='flex flex-1 items-center justify-start'>
             <Link className='flex flex-shrink-0 items-center' href='/'>
               <Image className='h-10 w-auto' src={logo} alt='ClassCue logo' />
-              <span className='md:block text-white text-2xl font-bold ml-2'>ClassCue</span>
+              <span className='md:block text-white text-3xl font-bold ml-2'>ClassCue |</span>
             </Link>
             {isLoggedIn && session?.user ? (
               <>
                 <Link className='flex flex-shrink-0 items-center' href='/show-items' >
-                  <span className='md:block text-white text-2l font-bold ml-2'>| Schedules</span>
+                  <span className='md:block text-white text-xl font-bold ml-2'>Schedules</span>
                 </Link>
               </>
             ) : (<></>)}
@@ -52,19 +52,18 @@ const Navbar = ({ session }: NavbarProps) => {
 
           {/* Right side - Auth status */}
           <div className='md:block md:ml-6'>
-            <div className='flex items-center justify-end text-white space-x-4'>
+            <div className='flex items-center justify-end text-white space-x-4 text-xl'>
               {isLoggedIn && session?.user ? (
                 <>
                   <span>Welcome, {session.user?.name || session.user?.email}</span>
                   <button
                     onClick={ handleLogout }
-                    className='bg-gray-400 hover:bg-gray-500 rounded-md px-3 py-2'
-                  >
+                    className='bg-[#faece5] hover:bg-[#c1b0a7] rounded-md px-3 py-2 text-black text-lg'>
                     Logout
                   </button> 
                 </>
               ) : (
-                <span className='bg-gray-400 hover:bg-gray-500 rounded-md px-3 py-2'>
+                <span className='bg-[#faece5] hover:bg-[#c1b0a7] rounded-md px-3 py-2 text-black'>
                   <Link href='/login' className='mr-1'>Login</Link> | <Link href='/signup' className='ml-1'>Register</Link>
                 </span>
               )}
