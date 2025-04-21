@@ -44,6 +44,11 @@ const Item = ({ item, onDelete, isExample=false }: ItemProps) => {
     }
   };
 
+  // Ensures there is always a valid start date, defaults to current date
+  if (new Date(item.start).toString() === 'Invalid Date') {
+    item.start = new Date()
+  };
+
   return (
     <Card>
       <div className="w-full h-68 relative rounded overflow-hidden">
