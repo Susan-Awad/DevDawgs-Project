@@ -5,7 +5,7 @@
     "duration": 1,
     "tasks": [{
       "name": "Study Math",
-      "dueDate": "2025-04-25",
+      "dueDate": "2025-04-25T00:00:00",
       "points": 80
     },
     {
