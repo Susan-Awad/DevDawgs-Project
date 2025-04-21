@@ -45,7 +45,7 @@ const Item = ({ item, onDelete, isExample=false }: ItemProps) => {
   };
 
   // Ensures there is always a valid start date, defaults to current date
-  if (new Date(item.start).toString() === 'Invalid Date') {
+  if (new Date(item.start).toString() === "Invalid Date") {
     item.start = new Date()
   };
 

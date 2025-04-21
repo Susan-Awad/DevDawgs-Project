@@ -43,7 +43,7 @@ export default function UpdateItem() {
         const task = data.item; 
 
         setScheduleName(task.title || '');
-        setStart(new Date());
+        setStart(task.start);
         if (task.duration === 1) {
           setDuration('1 Week');
         } else setDuration('2 Weeks');
