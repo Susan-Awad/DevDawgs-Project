@@ -1,10 +1,11 @@
 import React from "react";
 
+// Reusable button component with customizable variant and size styles.
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "default" | "ghost";
   size?: "default" | "icon";
 }
-
+// Defines a functional Button component
 export const Button: React.FC<ButtonProps> = ({
   children,
   className,

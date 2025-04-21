@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Content from '../components/Content';
  
+// Displays a 404 Not Found page with a message and link to the homepage.
 export default async function NotFound() {
 
   return (
