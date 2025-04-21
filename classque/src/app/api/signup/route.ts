@@ -1,22 +1,25 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import User from "../../../models/userSchema";
-
 import bcrypt from "bcryptjs";
 import connectMongoDB from "../../../../config/mongodb";
 
+// Handles user registration by parsing the request body, hashing the password,
+export const POST = async (request: NextRequest) => {
+  const { username, email, password } = await request.json();
 
-export const POST = async (request) => {
-  const {username, email, password} = await request.json();
-
-  console.log(username, email, password);
-
+    
+// Connects to the MongoDB database
   await connectMongoDB();
+  
   const hashedPassword = await bcrypt.hash(password, 5);
+  
+// Construct the new user object
   const newUser = {
     username,
     password: hashedPassword,
-    email
-  }
+    email,
+  };
+
   try {
     await User.create(newUser);
   } catch (e: any) {
@@ -28,5 +31,4 @@ export const POST = async (request) => {
   return new NextResponse("User has been created", {
     status: 201,
   });
-
- }
+};
