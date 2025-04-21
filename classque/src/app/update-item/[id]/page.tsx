@@ -174,7 +174,7 @@ export default function UpdateItem() {
 
   return (
     <div className='bg-[#F7D0BC]'>
-    <div className="max-w-2xl mx-auto mt-10 px-4">
+    <div className="max-w-2xl mx-auto mt-10 px-4 pb-10">
       <Card>
         <div className="text-3xl font-bold mb-4 text-center">ClassCue</div>
         <form onSubmit={handleSubmit} className="space-y-4">

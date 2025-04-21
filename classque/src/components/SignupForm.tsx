@@ -46,7 +46,7 @@ const SignupForm = () => {
   }
 
   return (
-    <>
+    <div className="h-screen">
       <div className="grid mt-8 justify-items-center"> 
         <div className="shadow-lg p-5 rounded-lg border-t-4 bg-white border-[#6A3636]">
           <h1 className="text-3xl text-slate-600 font-bold my-4">You're new, welcome!</h1>
@@ -102,7 +102,7 @@ const SignupForm = () => {
           </p>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

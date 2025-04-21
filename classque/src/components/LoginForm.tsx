@@ -29,7 +29,7 @@ const LoginForm = () => {
   }
 
   return (
-    <div className='ShowItemList'>
+    <div className='h-dvh'>
       <div className="grid mt-8 justify-items-center"> 
         <div className="shadow-lg border-[#6A3636] p-5 rounded-lg border-t-4 bg-white">
           <h1 className="text-3xl text-slate-600 font-bold my-4">Good to see you again!</h1>
