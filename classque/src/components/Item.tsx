@@ -91,15 +91,12 @@ const Item = ({ item, onDelete, isExample=false }: ItemProps) => {
       <div className="max-h-30 overflow-y-scroll">
         <div className="mt-2">
           {bestSchedule(item).map((tasks,index) => {
-            console.log("Day", index, "tasks:", tasks);
-
             if(!tasks || tasks.length === 0) {
               return null;  
             }
             
-            const newDate = new Date(item.start);
-            newDate.setDate(newDate.getDate() + index);
-            console.log(newDate)
+            const newDate = new Date(item.start)
+            newDate.setDate(newDate.getDate() + index)
             
             return (
               <div key={index}>
@@ -117,7 +114,7 @@ const Item = ({ item, onDelete, isExample=false }: ItemProps) => {
                   </p>
                 ))}
               </div>
-              );
+              )
           })}
           </div>      
         </div>

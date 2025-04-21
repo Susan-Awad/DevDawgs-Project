@@ -8,28 +8,26 @@ export const bestSchedule = (item) => {
     // Determines how many days between start and end dtates, placing
     // it within the item
     let tasksWithDates = item.tasks.map(task => {
-        const startDate = start.getDate()
+        const startDate = start.getDate();
         const endDate = Number(task.dueDate.toString().substring(8,10));
         const endMonth = Number(task.dueDate.toString().substring(6,7));
-        const startMonth = start.getMonth() + 1
+        const startMonth = start.getMonth() + 1;
 
-        let daysTillDue = 0
+        let daysTillDue = 0;
 
         // Accounts for tasks in different months
         if (startMonth == endMonth) {
-            daysTillDue = (endDate - startDate)
+            daysTillDue = (endDate - startDate);
         } else {
-            const daysInMonth = new Date(start.getFullYear(), startMonth, 0).getDate()
-            console.log(daysInMonth)
-            daysTillDue = (daysInMonth - startDate) + endDate
-
+            const daysInMonth = new Date(start.getFullYear(), startMonth, 0).getDate();
+            daysTillDue = (daysInMonth - startDate) + endDate;
         }
         return {
             ...task,
             date: daysTillDue,
             inTimeSlot: false
         };
-    })
+    });
 
     // Job scheduling algorithm that determines optimal date to complete
     // Create an array of arrays to have multiple tasks due on a single day
@@ -39,24 +37,24 @@ export const bestSchedule = (item) => {
         for (let j = start; j >= 0; j--) {
             if (j >= 0 && j < timeSlot.length && timeSlot[j].length === 0) {
                 timeSlot[j].push(tasksWithDates[i]);
-                tasksWithDates[i].date = j
-                tasksWithDates[i].inTimeSlot = true
+                tasksWithDates[i].date = j;
+                tasksWithDates[i].inTimeSlot = true;
                 break;
-            }
-        }
-    }
+            };
+        };
+    };
 
     // If item is still not in the array due to lack of space, place it in
     // the date its due
     for (let i = 0; i < tasksWithDates.length; i++) {
         if (!tasksWithDates[i].inTimeSlot) {
-            const index = tasksWithDates[i].date
+            const index = tasksWithDates[i].date;
             if (index >= 0) {
                 timeSlot[index].push(tasksWithDates[i]);
             }
-        }
-    }
+        };
+    };
     
     // Returns array
-    return timeSlot
+    return timeSlot;
 }
