@@ -38,32 +38,33 @@ const Navbar = ({ session }: NavbarProps) => {
           {/* Left side - Logo and nav links */}
           <div className='flex flex-1 items-center justify-start'>
             <Link className='flex flex-shrink-0 items-center' href='/'>
-              <Image className='h-10 w-auto' src={logo} alt='ClassCue logo' />
-              <span className='md:block text-white text-3xl font-bold ml-2'>ClassCue |</span>
+              <Image className='h-8 w-auto sm:h-10' src={logo} alt='ClassCue logo' />
+              <span className='text-white text-sm sm:text-lg md:text-2xl lg:text-3xl font-bold ml-2'>ClassCue |</span>
             </Link>
             {isLoggedIn && session?.user ? (
               <>
                 <Link className='flex flex-shrink-0 items-center' href='/show-items' >
-                  <span className='md:block text-white text-xl font-bold ml-2'>Schedules</span>
+                  <span className='text-white text-xs sm:text-sm md:text-lg lg:text-xl font-bold ml-2'>Schedules</span>
                 </Link>
               </>
             ) : (<></>)}
           </div>
 
           {/* Right side - Auth status */}
-          <div className='md:block md:ml-6'>
-            <div className='flex items-center justify-end text-white space-x-4 text-xl'>
+          <div className='md:ml-6'>
+            <div className='flex items-center justify-end text-white space-x-2 sm:space-x-4'>
               {isLoggedIn && session?.user ? (
                 <>
-                  <span>Welcome, {session.user?.name || session.user?.email}</span>
+                  <span className='text-xs sm:text-sm md:text-base lg:text-lg truncate max-w-[100px] sm:max-w-[150px] md:max-w-full'>
+                    Welcome, {session.user?.name || session.user?.email}</span>
                   <button
                     onClick={ handleLogout }
-                    className='bg-[#faece5] hover:bg-[#c1b0a7] rounded-md px-3 py-2 text-black text-lg'>
+                    className='bg-[#faece5] hover:bg-[#c1b0a7] rounded-md px-2 py-1 sm:px-3 sm:py-2 text-black text-xs sm:text-sm md:text-base lg:text-lg'>
                     Logout
                   </button> 
                 </>
               ) : (
-                <span className='bg-[#faece5] hover:bg-[#c1b0a7] rounded-md px-3 py-2 text-black'>
+                <span className='bg-[#faece5] hover:bg-[#c1b0a7] rounded-md px-2 py-1 sm:px-3 sm:py-2 text-black text-xs sm:text-sm md:text-base lg:text-lg'>
                   <Link href='/login' className='mr-1'>Login</Link> | <Link href='/signup' className='ml-1'>Register</Link>
                 </span>
               )}
