@@ -51,7 +51,7 @@ const Welcome = () => {
         {/*Explanation & Examples*/}
         <div className="bg-[#faece5] bg-opacity-80 p-8 rounded-lg shadow-md pt-15">
             <h1 className="text-5xl font-bold mb-4 text-center tracking-widest">What Do We Do?</h1>
-            <p className="text-2xl mb-4 w-20px max-w-full mx-auto text-center">Do you have a busy week? Our application will optimize your work calandar. 
+            <p className="text-2xl mb-4 w-20px max-w-full mx-auto text-center">Do you have a busy week? Our application will optimize your work calendar. 
                 When you create a schedule, our application will maximize your week by showing you how to best
                 divide your time based on each tasks importance. All you have to do is insert all your tasks within one or two weeks,
                 give their due dates and points, and we will do all the work!

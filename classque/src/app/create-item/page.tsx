@@ -113,6 +113,7 @@ export default function ScheduleAddForm() {
       // Transform tasks to match ITask interface (remove the id field)
       const tasksToSubmit = validTasks.map(({ id, ...rest }) => rest);
 
+      // compiles all the form data together and is used below as the post request to create the new schedule.
       const formData = {
         scheduleName,
         start,
